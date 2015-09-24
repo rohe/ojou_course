@@ -1,32 +1,57 @@
 #!/usr/bin/env python
+"""
+Creating and reading JWKs and JWKS
+"""
 import json
-from oic.utils.keyio import create_and_store_rsa_key_pair, \
-    build_keyjar
-from jwkest.jwk import RSAKey, KEYS, keyitems2keyreps
+from oic.utils.keyio import create_and_store_rsa_key_pair
+from oic.utils.keyio import build_keyjar
+from jwkest.jwk import RSAKey
+from jwkest.jwk import KEYS
+from jwkest.jwk import keyitems2keyreps
 
+# Will create 2 files on disc
+# 'foo' will contain the private key
+# 'foo.pub' will contain the public key
 key = create_and_store_rsa_key_pair("foo", size=2048)
 
 rsa = RSAKey().load_key(key)
+# by default this will be the public part of the key
 ser_rsa = rsa.serialize()
 
-print "--- JWK ----"
-print json.dumps(ser_rsa, sort_keys=True, indent=4, separators=(',', ': '))
-print
+print("--- JWK (public) ----")
+print(json.dumps(ser_rsa, sort_keys=True, indent=4, separators=(',', ': ')))
+print()
 
-k = keyitems2keyreps({"RSA": [key]})
+# and this will give you the serialization of the private key
+ser_rsa = rsa.serialize(private=True)
 
-print "--- JWKS ----"
+print("--- JWK (private) ----")
+print(json.dumps(ser_rsa, sort_keys=True, indent=4, separators=(',', ': ')))
+print()
+
+# ============================================================================
+# And now for the JWKS
+
 keys = KEYS()
 keys.wrap_add(key, use="sig", kid="rsa1")
-print keys.dump_jwks()
 
+print("--- JWKS ----")
+print(keys.dump_jwks())
+
+# Build a number of keys from a specification and place them in a keyjar
 key_conf = [
     {"type": "RSA", "name": "rsa_key", "use": ["enc", "sig"]},
     {"type": "EC", "crv": "P-256", "use": ["sig"]},
     {"type": "EC", "crv": "P-256", "use": ["enc"]}
 ]
 
+# The function return a set of representations of the keys that was
+# created.
+# jwks: a JWKS representation
+# keyjar: a oic.utils.keyio.KeyJar instance with the keys added
+# kdd: a simple dictionary enumerating which key ids that can be used for
+# which key operations.
 jwks, keyjar, kdd = build_keyjar(key_conf, "m%d", None, None)
 
-print "---- JWKS from keyjar ----"
-print jwks
+print("---- JWKS from specification ----")
+print(jwks)
