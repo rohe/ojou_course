@@ -1,18 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Show how to do compact signing and verification of JWTs.
 """
-import json
-from jwkest import b64d
+
+from jwkest import jws
+
 from jwkest.jwk import import_rsa_key_from_file
 from jwkest.jwk import RSAKey
 from jwkest.jws import JWS
-from jwkest.jwt import JWT
+
+from oic.utils.time_util import utc_time_sans_frac
 
 __author__ = 'roland'
 
 payload = {"iss": "joe",
-           "exp": 1300819380,
+           "exp": utc_time_sans_frac()+3600,
            "http://example.com/is_root": True}
 
 # The JWS class can not work directly with rsa keys.
@@ -29,19 +31,15 @@ print()
 # encrypted. It will not do any verificiation or decryption just unpacking
 # the JWT.
 
-jwt = JWT()
-jwt.unpack(_jwt)
-print("jwt headers:", jwt.headers)
+_jw = jws.factory(_jwt)
+print("jwt headers:", _jw.jwt.headers)
 
 # Part 0 is the headers
 # Part 1 is the payload message
-print("jwt part 1:", jwt.part[1])
+print("jwt part 1:", _jw.jwt.part[1])
 print()
 
-# If you want to verify the signature you have to use the JWS class
-_rj = JWS()
-
 # If everything is OK the verify_compact method will return the payload message
-info = _rj.verify_compact(_jwt, keys)
+info = _jw.verify_compact(_jwt, keys)
 
 print("Verified info:", info)

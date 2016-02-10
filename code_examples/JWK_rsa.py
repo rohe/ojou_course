@@ -7,7 +7,6 @@ from oic.utils.keyio import create_and_store_rsa_key_pair
 from oic.utils.keyio import build_keyjar
 from jwkest.jwk import RSAKey
 from jwkest.jwk import KEYS
-from jwkest.jwk import keyitems2keyreps
 
 # Will create 2 files on disc
 # 'foo' will contain the private key
@@ -53,5 +52,6 @@ key_conf = [
 # which key operations.
 jwks, keyjar, kdd = build_keyjar(key_conf, "m%d", None, None)
 
+print()
 print("---- JWKS from specification ----")
 print(jwks)

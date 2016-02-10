@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 """
-Code to show how you can use WebFinger to aquire the issuer ID
+Code to show how you can use WebFinger to acquire the issuer ID
 of an OpenID Connect provider using an account id
 """
+
 import json
-from oic.oauth2 import PBase
 import requests
-from oic.utils.webfinger import WebFinger, OIC_ISSUER
+
+from oic.oauth2 import PBase
+from oic.utils.webfinger import OIC_ISSUER
+from oic.utils.webfinger import WebFinger
+
+from requests.packages import urllib3
+urllib3.disable_warnings()
 
 __author__ = 'roland'
 
@@ -19,7 +25,9 @@ wf = WebFinger()
 # contruct the webfinger query URL
 query = wf.query("acct:carol@op1.test.inacademia.org", rel=OIC_ISSUER)
 
-print(query)
+print(60*'-')
+print('QUERY:{}'.format(query))
+print(60*'-')
 
 r = requests.request("GET", query, verify=False)
 
@@ -30,6 +38,7 @@ print(json.dumps(jwt, sort_keys=True, indent=4, separators=(',', ': ')))
 
 # =====================================================================
 # A bit more high level
+print(60*'=')
 
 wf = WebFinger()
 

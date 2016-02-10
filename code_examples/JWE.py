@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Show of how to so encryption and decryption of JWTs
 """
@@ -35,7 +35,9 @@ for p in jwt1.split('.'):
 # decryption. Using the one you already have is OK.
 msg = _rsa15_jwe.decrypt(jwt1, rsa)
 print()
-print(("After decryption (RSA 1.5+A128CBC-HS256): {}".format(msg)))
+print("After decryption (RSA 1.5+A128CBC-HS256): {}".format(msg))
+
+print(60*'=')
 
 # Test using other algorithms
 jwt2 = JWE_RSA(plain, alg="RSA-OAEP", enc="A256GCM").encrypt(rsa)
