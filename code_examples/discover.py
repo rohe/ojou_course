@@ -47,5 +47,4 @@ issuer = cli.discover("carol@oictest.umdc.umu.se:8092")
 
 # pcr is an instance of oic.oic.message.ProviderConfigurationResponse
 pcr = cli.provider_config(issuer)
-
 print(pcr.to_dict())
