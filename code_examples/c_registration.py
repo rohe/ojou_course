@@ -2,14 +2,11 @@ import json
 from oic.oic import Client
 
 from requests.packages import urllib3
-
 urllib3.disable_warnings()
 
-__author__ = 'roland'
+rp = Client(verify_ssl=False)
 
-rp = Client()
-
-issuer = rp.discover("carol@oictest.umdc.umu.se:8092")
+issuer = rp.discover("acct:diana@agaton-sax.com:8041")
 
 pcr = rp.provider_config(issuer)
 

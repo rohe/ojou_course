@@ -22,8 +22,9 @@ __author__ = 'roland'
 # Initiate the WebFinger class
 wf = WebFinger()
 
+RESOURCE = "acct:carol@op1.test.inacademia.org"
 # contruct the webfinger query URL
-query = wf.query("acct:carol@op1.test.inacademia.org", rel=OIC_ISSUER)
+query = wf.query(RESOURCE, rel=OIC_ISSUER)
 
 print(60*'-')
 print('QUERY:{}'.format(query))
@@ -46,5 +47,5 @@ wf = WebFinger()
 wf.httpd = PBase(verify_ssl=False)
 
 # discover_query will follow webfinger redirects
-url = wf.discovery_query("acct:carol@op1.test.inacademia.org")
+url = wf.discovery_query(RESOURCE)
 print(url)

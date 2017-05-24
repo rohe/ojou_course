@@ -2,7 +2,7 @@
 """
 Show of how to so encryption and decryption of JWTs
 """
-from Crypto.PublicKey import RSA
+from Cryptodome.PublicKey import RSA
 from jwkest.jwe import JWE_RSA
 
 __author__ = 'roland'
@@ -19,8 +19,6 @@ plain = "Now is the time for all good men to come to the aid of their country."
 # encryption on the Plaintext to produce the Ciphertext and the Authentication
 # Tag.
 
-# If the instance is going to be used to encrypt the message has to be
-# available at initialization.
 # If you want you can give the message when initiating the class but it
 # can also be done later (just-in-time).
 

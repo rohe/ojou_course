@@ -18,7 +18,11 @@ __author__ = 'roland'
 # =============================================================================
 
 wf = WebFinger()
-query = wf.query("acct:carol@oictest.umdc.umu.se:8092", rel=OIC_ISSUER)
+ACCOUNT = "carol@localhost:8040"
+#ACCOUNT = "carol@op1.test.inacademia.org"
+RESOURCE = "acct:{}".format(ACCOUNT)
+
+query = wf.query(RESOURCE, rel=OIC_ISSUER)
 
 r = requests.request("GET", query, verify=False)
 
@@ -28,7 +32,7 @@ url = jwt["links"][0]["href"]
 print("Issuer URL from webfinger:", url)
 
 # Construct the URL used to get the provider configuration
-url = OIDCONF_PATTERN % url[:-1]
+url = OIDCONF_PATTERN % url
 
 print("Provider configuration url:", url)
 
@@ -42,8 +46,9 @@ print(json.dumps(jwt, sort_keys=True, indent=4, separators=(',', ': ')))
 # A bit more higher level :-)
 
 cli = Client()
+cli.verify_ssl = False
 
-issuer = cli.discover("carol@oictest.umdc.umu.se:8092")
+issuer = cli.discover("carol@op1.test.inacademia.org")
 
 # pcr is an instance of oic.oic.message.ProviderConfigurationResponse
 pcr = cli.provider_config(issuer)

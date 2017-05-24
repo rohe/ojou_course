@@ -3,17 +3,24 @@
 Creating and reading JWKs and JWKS
 """
 import json
+import os
+
 from oic.utils.keyio import create_and_store_rsa_key_pair
 from oic.utils.keyio import build_keyjar
+from jwkest.jwk import import_rsa_key_from_file
 from jwkest.jwk import RSAKey
 from jwkest.jwk import KEYS
 
-# Will create 2 files on disc
+# Will create 2 files on disc if not there already
 # 'foo' will contain the private key
 # 'foo.pub' will contain the public key
-key = create_and_store_rsa_key_pair("foo", size=2048)
+if not os.path.isfile('foo'):
+    key = create_and_store_rsa_key_pair("foo", size=2048)
+    rsa = RSAKey().load_key(key)
+else:
+    rsa = RSAKey(key=import_rsa_key_from_file("foo"))
+    key = rsa.key
 
-rsa = RSAKey().load_key(key)
 # by default this will be the public part of the key
 ser_rsa = rsa.serialize()
 

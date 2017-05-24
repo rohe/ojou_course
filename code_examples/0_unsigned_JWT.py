@@ -34,22 +34,22 @@ https://tools.ietf.org/html/rfc7519
 
 6.  Otherwise, let the resulting JWT be the JWS or JWE
 """
-from jwkest import b64e
+from jwkest import b64e, as_bytes, as_unicode
 import json
 
 # 1
 claims_set = {"foo": "bar"}
 # 2
 txt = json.dumps(claims_set)
-msg = b64e(txt)
+msg = b64e(as_bytes(txt))
 
 #3
 header = {"alg": "none"}
 htxt = json.dumps(header)
-hdr = b64e(htxt)
+hdr = b64e(as_bytes(htxt))
 
 # (4,5),6
-jws = ".".join([hdr, msg, ""])
+jws = ".".join([as_unicode(hdr), as_unicode(msg), ""])
 
 print("JWT={}".format(jws))
 
